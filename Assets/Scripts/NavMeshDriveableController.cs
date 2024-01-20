@@ -1,16 +1,22 @@
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class NavMeshDriveableController : Singleton<NavMeshDriveableController>
 {
+    [SerializeField] private NavMeshSurface _navMeshSurface;
     [SerializeField] private Transform _pathsParent;
     [SerializeField, ReadOnly] private List<DrivePath> _drivePaths = new();
 
+    private bool _hasBeenRebuilt;
+
     [Button]
-    private void GetPaths()
+    private void SetPaths()
     {
+        _drivePaths.Clear();
+
         foreach (Transform t in _pathsParent.transform)
         {
             var a = t.GetChild(0);

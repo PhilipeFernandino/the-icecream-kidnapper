@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Car : MonoBehaviour
+public class VanController : MonoBehaviour
 {
     [Header("Properties")]
     [SerializeField] private float _motorForce;
@@ -32,6 +32,12 @@ public class Car : MonoBehaviour
     private float _y;
     private bool _isBreaking;
     private Vector3 _localVelocity;
+    private bool _isBusted = false;
+
+    public void Busted()
+    {
+        _isBusted = true;
+    }
 
     private void Start()
     {
@@ -47,10 +53,17 @@ public class Car : MonoBehaviour
 
     private void FixedUpdate()
     {
-        HandleMotor();
-        HandleBrake();
-        HandleSteering();
-        AddAntiRoll();
+        if (_isBusted)
+        {
+            ApplyBrake();
+        }
+        else
+        {
+            HandleMotor();
+            HandleBrake();
+            HandleSteering();
+            AddAntiRoll();
+        } 
     }
 
     private void AddAntiRoll()
@@ -104,10 +117,7 @@ public class Car : MonoBehaviour
             || (_y < 0 && _localVelocity.z > 0) 
             || (_y > 0 && _localVelocity.z < 0))
         {
-            _frontLeftWheelCollider.brakeTorque = _frontBrakeForce;
-            _frontRightWheelCollider.brakeTorque = _frontBrakeForce;
-            _backLeftWheelCollider.brakeTorque = _rearBrakeForce;
-            _backRightWheelCollider.brakeTorque = _rearBrakeForce;
+            ApplyBrake();
         }
         else
         {
@@ -116,6 +126,14 @@ public class Car : MonoBehaviour
             _backLeftWheelCollider.brakeTorque = 0;
             _backRightWheelCollider.brakeTorque = 0;
         }
+    }
+
+    private void ApplyBrake()
+    {
+        _frontLeftWheelCollider.brakeTorque = _frontBrakeForce;
+        _frontRightWheelCollider.brakeTorque = _frontBrakeForce;
+        _backLeftWheelCollider.brakeTorque = _rearBrakeForce;
+        _backRightWheelCollider.brakeTorque = _rearBrakeForce;
     }
 
     private void HandleMotor()
@@ -141,6 +159,4 @@ public class Car : MonoBehaviour
         _z = Input.GetAxis("Horizontal");
         _isBreaking = Input.GetKey(KeyCode.Space);
     }
-
-    
 }
