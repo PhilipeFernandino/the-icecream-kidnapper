@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class TimeSystem : MonoBehaviour
+public class DaysSystem : MonoBehaviour
 {
-
+    
 }

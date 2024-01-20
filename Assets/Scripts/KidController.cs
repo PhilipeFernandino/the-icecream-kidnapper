@@ -11,11 +11,23 @@ public class KidController : MonoBehaviour
 
     private KidState _kidState;
     private NavMeshTargetType _navMeshTargetType;
+    private Vector3 _homePosition;
+
+    private int _hoursOnTheStreet = 0;
+    private int _maxHoursOnTheStreet;
+
+    private bool _isGoingHome = false;
 
     private NavMeshPath _navMeshPath;
-    
+
     public GameObject HoldingGameObject => _holdingGameObject;
     
+    public void Setup(Vector3 homePosition, int maxHoursOnTheStreet)
+    {
+        _maxHoursOnTheStreet = maxHoursOnTheStreet;
+        _homePosition = homePosition;
+    }
+
     public void MarkForSteal()
     {
         _mark.SetActive(true);
@@ -44,7 +56,7 @@ public class KidController : MonoBehaviour
         _holdingGameObject.transform.SetParent(null, false);
         
         _kidState = KidState.Crying;
-        SetPath(NavMeshTargetType.Home);
+        GoHome();
 
         UnmarkForSteal();
 
@@ -58,20 +70,49 @@ public class KidController : MonoBehaviour
         _navMeshPath = new();
         _navMeshTargetType = NavMeshTargetType.Path;
         _kidState = KidState.Walking;
+
+        DaytimeSystem.Instance.HourPassed += HourPassedEventHandler;
+        DaytimeSystem.Instance.DayEndReached += DayEndReachedEventHandler;
+
         UnmarkForSteal();
         InvokeRepeating(nameof(HandleNavMeshAgent), 1f, 1f);
     }
 
+    private void DayEndReachedEventHandler()
+    {
+        GoHome();
+    }
+
+    private void HourPassedEventHandler()
+    {
+        _hoursOnTheStreet += 1;
+        if (_hoursOnTheStreet == _maxHoursOnTheStreet)
+        {
+            GoHome();
+        }
+    }
+
+    private void GoHome()
+    {
+        SetPath(NavMeshTargetType.Home);
+        _isGoingHome = true;
+    }
 
     private void HandleNavMeshAgent()
     {
         if (!_navMeshAgent.pathPending 
-            && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance 
-            && _navMeshTargetType == NavMeshTargetType.Path)
+            && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
         {
             if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f)
             {
-                SetPath(NavMeshTargetType.Path);
+                if (_isGoingHome)
+                {
+                    gameObject.SetActive(false);
+                }
+                else
+                {
+                    SetPath(NavMeshTargetType.Path);
+                }
             }
         }
     }
@@ -85,7 +126,7 @@ public class KidController : MonoBehaviour
         }
         else
         {
-            target = NavMeshWalkableController.Instance.GetRandomHomeTarget();
+            target = _homePosition;
         }
 
         if (_navMeshAgent.CalculatePath(target, _navMeshPath))

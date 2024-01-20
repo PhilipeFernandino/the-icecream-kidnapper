@@ -41,7 +41,6 @@ public class Car : MonoBehaviour
     private void Update()
     {
         _localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
-        Debug.Log($"{_localVelocity}");
 
         GetInput();
     }
