@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StealController : MonoBehaviour
@@ -28,6 +29,18 @@ public class StealController : MonoBehaviour
             {
                 kidController.UnmarkForSteal();
                 _stealableKids.Remove(kidController);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (_stealableKids.Count > 0)
+            {
+                var stealedObject = _stealableKids.First().Steal();
+                Debug.Log(stealedObject.name + "has been stealed!");
             }
         }
     }
