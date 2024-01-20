@@ -90,7 +90,7 @@ public class KidController : MonoBehaviour
 
         if (_navMeshAgent.CalculatePath(target, _navMeshPath))
         {
-            Debug.LogError($"{GetType()} - Succesfully calculated path to {target}");
+            Debug.Log($"{GetType()} - Succesfully calculated path to {target}");
             _navMeshAgent.SetPath(_navMeshPath);
             _navMeshTargetType = navMeshTargetType;
         }

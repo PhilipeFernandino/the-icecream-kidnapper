@@ -7,6 +7,7 @@ public class Car : MonoBehaviour
 {
     [Header("Properties")]
     [SerializeField] private float _motorForce;
+    [SerializeField] private float _motorReverseForce;
     [SerializeField] private float _frontBrakeForce;
     [SerializeField] private float _rearBrakeForce;
     [SerializeField] private float _maxSteerAngle;
@@ -25,25 +26,31 @@ public class Car : MonoBehaviour
 
     [SerializeField] private Rigidbody _rigidbody;
 
+    [SerializeField] private Transform _centerOfMass;
+
     private float _z;
     private float _y;
     private bool _isBreaking;
+    private Vector3 _localVelocity;
 
     private void Start()
     {
-        _rigidbody.centerOfMass += new Vector3(0, 0, 0.5f);
+        _rigidbody.centerOfMass = _centerOfMass.position;
     }
 
     private void Update()
     {
+        _localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+        Debug.Log($"{_localVelocity}");
+
         GetInput();
     }
 
     private void FixedUpdate()
     {
-        AddMotorTorque();
-        AddBrake();
-        AddSteering();
+        HandleMotor();
+        HandleBrake();
+        HandleSteering();
         AddAntiRoll();
     }
 
@@ -85,16 +92,18 @@ public class Car : MonoBehaviour
         }
     }
 
-    private void AddSteering()
+    private void HandleSteering()
     {
         float steering = _maxSteerAngle * _z;
         _frontLeftWheelCollider.steerAngle = steering;
         _frontRightWheelCollider.steerAngle = steering;
     }
 
-    private void AddBrake()
+    private void HandleBrake()
     {
-        if (_isBreaking)
+        if (_isBreaking 
+            || (_y < 0 && _localVelocity.z > 0) 
+            || (_y > 0 && _localVelocity.z < 0))
         {
             _frontLeftWheelCollider.brakeTorque = _frontBrakeForce;
             _frontRightWheelCollider.brakeTorque = _frontBrakeForce;
@@ -110,11 +119,21 @@ public class Car : MonoBehaviour
         }
     }
 
-    private void AddMotorTorque()
+    private void HandleMotor()
     {
-        _frontLeftWheelCollider.motorTorque = _y * _motorForce;
-        _frontRightWheelCollider.motorTorque = _y * _motorForce;
+        float appliedTorque = 0;
 
+        if (_y > 0 && _localVelocity.z > 0)
+        {
+            appliedTorque = _y * _motorForce;
+        }
+        else if (_y < 0 && _localVelocity.z < 0)
+        {
+            appliedTorque = _y * _motorReverseForce;
+        }
+
+        _frontLeftWheelCollider.motorTorque = appliedTorque;
+        _frontRightWheelCollider.motorTorque = appliedTorque;
     }
 
     private void GetInput()

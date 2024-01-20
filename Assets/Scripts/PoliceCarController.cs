@@ -1,21 +1,8 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AI;
 
-namespace Assets.Scripts
+public class PoliceCarController : MonoBehaviour
 {
-    public class PoliceCarController : MonoBehaviour
-    {
+    [SerializeField] private NavMeshAgent _navMeshAgent;
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-    }
 }
