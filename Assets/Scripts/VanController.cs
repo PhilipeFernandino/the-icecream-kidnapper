@@ -1,7 +1,8 @@
+using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class VanController : MonoBehaviour
 {
@@ -25,9 +26,12 @@ public class VanController : MonoBehaviour
     [SerializeField] private Transform _backRightWheelTransform;
 
     [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private NavMeshObstacle _navMeshObstacle;
 
     [SerializeField] private Transform _centerOfMass;
     [SerializeField] private bool _useCenterOfMass;
+
+    [SerializeField] private AudioSource _engineAudio;
 
     private float _z;
     private float _y;
@@ -35,13 +39,26 @@ public class VanController : MonoBehaviour
     private Vector3 _localVelocity;
     private bool _isBusted = false;
 
-    public void Busted()
+    public event Action Busted;
+    public event Action Spotted;
+    public event Action Stealed;
+
+    public void Bust()
     {
         _isBusted = true;
+        Busted?.Invoke();
+    }
+
+    public void HasBeenSpotted()
+    {
+        _navMeshObstacle.enabled = false;
+        Spotted?.Invoke();
     }
 
     private void Start()
     {
+        _engineAudio.Play();
+
         if (_useCenterOfMass)
         {
             _rigidbody.centerOfMass = _centerOfMass.localPosition;
@@ -56,7 +73,25 @@ public class VanController : MonoBehaviour
     {
         _localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
 
+        UpdateAudioPitch();
         GetInput();
+    }
+
+    private async void UpdateAudioPitch()
+    {
+        _engineAudio.pitch = Remap(_localVelocity.z / 20, 0f, 1f, 0f, 2f);
+        await UniTask.Delay(20);
+        UpdateAudioPitch();
+    }
+
+    private float Remap(float value, float x1, float x2, float y1, float y2)
+    {
+        return y1 + (value - x1) * (y2 - y1) / (x2 - x1);
+    }
+
+    private bool Near(float a, float b)
+    {
+        return Mathf.Abs(b - a) < 0.1f;
     }
 
     private void FixedUpdate()
@@ -71,7 +106,7 @@ public class VanController : MonoBehaviour
             HandleBrake();
             HandleSteering();
             AddAntiRoll();
-        } 
+        }
     }
 
     private void AddAntiRoll()
@@ -121,8 +156,8 @@ public class VanController : MonoBehaviour
 
     private void HandleBrake()
     {
-        if (_isBreaking 
-            || (_y < 0 && _localVelocity.z > 0) 
+        if (_isBreaking
+            || (_y < 0 && _localVelocity.z > 0)
             || (_y > 0 && _localVelocity.z < 0))
         {
             ApplyBrake();

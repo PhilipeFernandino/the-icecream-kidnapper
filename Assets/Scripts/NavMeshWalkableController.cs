@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NavMeshWalkableController : Singleton<NavMeshWalkableController>
 {
-    [SerializeField] private Transform _pathTargetsParent;
+    [SerializeField] private List<Transform> _pathTargetsParents;
     [SerializeField] private Transform _homeTargetsParent;
 
     [SerializeField, ReadOnly] private List<Vector3> _pathTargets = new();
@@ -16,9 +16,12 @@ public class NavMeshWalkableController : Singleton<NavMeshWalkableController>
         _pathTargets.Clear();
         _homeTargets.Clear();
 
-        foreach (Transform t in _pathTargetsParent)
+        foreach (Transform pathParent in _pathTargetsParents)
         {
-            _pathTargets.Add(t.position);
+            foreach (Transform p in pathParent)
+            {
+                _pathTargets.Add(p.position);
+            }
         }
 
         foreach (Transform t in _homeTargetsParent)
@@ -39,7 +42,11 @@ public class NavMeshWalkableController : Singleton<NavMeshWalkableController>
 
     private void Awake()
     {
-        Destroy(_pathTargetsParent.gameObject);
+        foreach (Transform t in _pathTargetsParents)
+        {
+            Destroy(t.gameObject);
+        }
+
         Destroy(_homeTargetsParent.gameObject);
     }
 }

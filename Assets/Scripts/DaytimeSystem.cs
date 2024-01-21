@@ -15,6 +15,8 @@ public class DaytimeSystem : Singleton<DaytimeSystem>
     private int _dayEndInMinutes;
 
     public DateTime CurrentDayTime => _currentDayTime;
+    public float PassMinuteEverySeconds => _passMinuteEverySeconds;
+    public float HourDurationInRealSeconds => 60 * _passMinuteEverySeconds;
 
     public event Action DayEndReached;
     public event Action HourPassed;

@@ -7,34 +7,23 @@ using UnityEngine;
 public class NavMeshDriveableController : Singleton<NavMeshDriveableController>
 {
     [SerializeField] private NavMeshSurface _navMeshSurface;
-    [SerializeField] private Transform _pathsParent;
-    [SerializeField, ReadOnly] private List<DrivePath> _drivePaths = new();
-
-    private bool _hasBeenRebuilt;
+    [SerializeField] private Transform _targetsParent;
+    [SerializeField] private Transform _spawn;
+    [SerializeField, ReadOnly] private List<Vector3> _driveTargets = new();
 
     [Button]
     private void SetPaths()
     {
-        _drivePaths.Clear();
+        _driveTargets.Clear();
 
-        foreach (Transform t in _pathsParent.transform)
+        foreach (Transform t in _targetsParent.transform)
         {
-            var a = t.GetChild(0);
-            var b = t.GetChild(1);
-
-            if (a == null || b == null)
-            {
-                Debug.LogError($"{GetType()} - A or B null in {t}");
-                continue;
-            }
-
-            var drivePath = new DrivePath(a.position, b.position);
-            _drivePaths.Add(drivePath);
+            _driveTargets.Add(t.position);
         }
     }
 
     public DrivePath GetRandomPath()
     {
-        return _drivePaths[Random.Range(0, _drivePaths.Count)];
+        return new DrivePath(_spawn.position, _driveTargets[Random.Range(0, _driveTargets.Count)]);
     }
 }

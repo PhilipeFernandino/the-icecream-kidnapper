@@ -8,13 +8,20 @@ public class KidController : MonoBehaviour
     [SerializeField] private NavMeshAgent _navMeshAgent;
     [SerializeField] private GameObject _holdingGameObject;
     [SerializeField] private GameObject _mark;
+    [SerializeField] private float _radiusToLookForRandomTarget;
+    [SerializeField] private float _cryOutLoudRadius;
+    [SerializeField] private float _cryOutLoudEverySeconds;
+    [SerializeField] private int _walkAreaMaskBits;
+    [SerializeField] private LayerMask _cryOutLoudMask;
 
     private KidState _kidState;
     private NavMeshTargetType _navMeshTargetType;
     private Vector3 _homePosition;
+    private Collider[] _overlapSphereColliders = new Collider[2];
 
     private int _hoursOnTheStreet = 0;
     private int _maxHoursOnTheStreet;
+    private int _walkAreaMask; 
 
     private bool _isGoingHome = false;
 
@@ -56,6 +63,7 @@ public class KidController : MonoBehaviour
         _holdingGameObject.transform.SetParent(null, false);
         
         _kidState = KidState.Crying;
+        InvokeRepeating(nameof(CryOutLoud), 0f, _cryOutLoudEverySeconds);
         GoHome();
 
         UnmarkForSteal();
@@ -65,8 +73,24 @@ public class KidController : MonoBehaviour
         return stealedObject;
     }
 
+    private void CryOutLoud()
+    {
+        int hits = Physics.OverlapSphereNonAlloc(transform.position, _cryOutLoudRadius, _overlapSphereColliders, _cryOutLoudMask, QueryTriggerInteraction.Ignore);
+        for (int i = 0; i < hits; i++)
+        {
+            if (_overlapSphereColliders[i].TryGetComponent<PoliceCarController>(out PoliceCarController police))
+            {
+                police.SpotKidCrying(this);
+            }
+        }
+    }
+
     private void Awake()
     {
+        _walkAreaMask = 1 << _walkAreaMaskBits;
+
+        _navMeshAgent.areaMask = _walkAreaMask;
+
         _navMeshPath = new();
         _navMeshTargetType = NavMeshTargetType.Path;
         _kidState = KidState.Walking;
@@ -107,7 +131,7 @@ public class KidController : MonoBehaviour
             {
                 if (_isGoingHome)
                 {
-                    gameObject.SetActive(false);
+                    EnterHome();
                 }
                 else
                 {
@@ -115,6 +139,13 @@ public class KidController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void EnterHome()
+    {
+        DaytimeSystem.Instance.HourPassed -= HourPassedEventHandler;
+        DaytimeSystem.Instance.DayEndReached-= DayEndReachedEventHandler;
+        Destroy(gameObject);
     }
 
     private async void SetPath(NavMeshTargetType navMeshTargetType)
@@ -142,6 +173,8 @@ public class KidController : MonoBehaviour
             SetPath(navMeshTargetType);
         }
     }
+
+
 
     public enum KidState
     {
