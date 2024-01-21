@@ -27,6 +27,7 @@ public class VanController : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
 
     [SerializeField] private Transform _centerOfMass;
+    [SerializeField] private bool _useCenterOfMass;
 
     private float _z;
     private float _y;
@@ -41,7 +42,14 @@ public class VanController : MonoBehaviour
 
     private void Start()
     {
-        _rigidbody.centerOfMass = _centerOfMass.position;
+        if (_useCenterOfMass)
+        {
+            _rigidbody.centerOfMass = _centerOfMass.localPosition;
+        }
+        else
+        {
+            _rigidbody.automaticCenterOfMass = true;
+        }
     }
 
     private void Update()
