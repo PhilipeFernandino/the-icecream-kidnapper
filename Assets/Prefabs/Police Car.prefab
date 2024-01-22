@@ -54,8 +54,8 @@ MonoBehaviour:
   _bustTrigger: {fileID: 9163903582754562116}
   _visionTrigger: {fileID: 184576706747541037}
   _recalculatePathToPlayerEverySeconds: 0.2
-  _chaseSpeed: 8
-  _chaseAcceleration: 5
+  _chaseSpeed: 12
+  _chaseAcceleration: 9
   _chaseAreaInBit: 4
   _rigidbody: {fileID: 5568888324051841422}
 --- !u!195 &6688696593529042283

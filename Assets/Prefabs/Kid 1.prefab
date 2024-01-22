@@ -76,7 +76,7 @@ MonoBehaviour:
   _holdingGameObject: {fileID: 9091816091488650058}
   _mark: {fileID: 5959711867209158014}
   _radiusToLookForRandomTarget: 50
-  _cryOutLoudRadius: 120
+  _cryOutLoudRadius: 40
   _cryOutLoudEverySeconds: 1
   _walkAreaMaskBits: 0
   _cryOutLoudMask:
