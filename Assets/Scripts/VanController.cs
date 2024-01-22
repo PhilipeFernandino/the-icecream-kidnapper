@@ -77,11 +77,9 @@ public class VanController : MonoBehaviour
         GetInput();
     }
 
-    private async void UpdateAudioPitch()
+    private void UpdateAudioPitch()
     {
-        _engineAudio.pitch = Remap(_localVelocity.z / 20, 0f, 1f, 0f, 2f);
-        await UniTask.Delay(20);
-        UpdateAudioPitch();
+        _engineAudio.pitch = Remap(Mathf.Abs(_localVelocity.z) / 20, 0f, 1f, 0f, 2f);
     }
 
     private float Remap(float value, float x1, float x2, float y1, float y2)

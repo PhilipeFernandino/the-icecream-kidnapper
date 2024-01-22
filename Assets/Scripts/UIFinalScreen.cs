@@ -12,6 +12,7 @@ public class UIFinalScreen : MonoBehaviour
 
     public void Setup()
     {
+        _canvas.enabled = true;
         _finalStatus.text = _finalStatus.text.Replace("$", FindObjectOfType<StealController>().TotalStealed.ToString());
     }
 

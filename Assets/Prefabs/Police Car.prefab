@@ -79,7 +79,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: -0.18
   m_WalkableMask: 8
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 2
 --- !u!65 &2046976786191968072
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -145,7 +145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2661721094318066801
 Transform:
   m_ObjectHideFlags: 0
@@ -180,8 +180,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 16.026218, y: 8.560407, z: 60.058434}
-  m_Center: {x: 0, y: 1.17, z: 10.657284}
+  m_Size: {x: 16.026218, y: 4.2154703, z: 38.786873}
+  m_Center: {x: 0, y: 0.25006056, z: 6.583416}
 --- !u!114 &184576706747541037
 MonoBehaviour:
   m_ObjectHideFlags: 0

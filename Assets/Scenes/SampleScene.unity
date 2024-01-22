@@ -260,10 +260,10 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 7.603964
-      value: 1.2854493
-      inSlope: 0.11336481
-      outSlope: 0.11336481
+      time: 10.017752
+      value: 1.0112183
+      inSlope: 0.10001208
+      outSlope: 0.10001208
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -280,7 +280,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _criminalityRate: 5
+  _criminalityRate: 0
 --- !u!4 &30839321
 Transform:
   m_ObjectHideFlags: 0
@@ -623,14 +623,14 @@ MonoBehaviour:
   _kidPrefabs:
   - {fileID: 1576695040507314827, guid: f1bb98b9651fed54fa288b707897154e, type: 3}
   - {fileID: 1576695040507314827, guid: f413ae91b8025de4fa656489b5368ec8, type: 3}
-  _kidMinHoursOnStreet: 2
-  _kidMaxHoursOnStreet: 4
+  _kidMinHoursOnStreet: 3
+  _kidMaxHoursOnStreet: 5
   _kidSpawnPerHour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 8.019281
-      value: 2.947966
+      time: 7.9898434
+      value: 1.972014
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -638,23 +638,14 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 13.027746
-      value: 4.336089
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 15.968891
-      value: 2.1705937
-      inSlope: -1.1511456
-      outSlope: -1.1511456
+      time: 13.518933
+      value: 2.4857888
+      inSlope: -0.096547686
+      outSlope: -0.096547686
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.24117829
+      outWeight: 0.22435394
     - serializedVersion: 3
       time: 19.964725
       value: -0.05167079
@@ -915,7 +906,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15034416, y: -0.0000000170108, z: 0.000000002586878, w: 0.98863375}
+  m_LocalRotation: {x: 0.15034416, y: 0.000000017010816, z: -0.0000000025868803, w: 0.98863375}
   m_LocalPosition: {x: -382.22784, y: 8.82, z: -10.020966}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2401,7 +2392,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792716015}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15034416, y: -0.0000000170108, z: 0.000000002586878, w: 0.98863375}
+  m_LocalRotation: {x: 0.15034416, y: 0.000000017010816, z: -0.0000000025868803, w: 0.98863375}
   m_LocalPosition: {x: -382.22784, y: 8.82, z: -10.020966}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3119,7 +3110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc8f5427c0515f45a70172f5d4c6533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _passMinuteEverySeconds: 0.5
+  _passMinuteEverySeconds: 0.25
   _dayStartInHours: 8
   _dayEndInHours: 20
   _astroLightFilterGradient:
@@ -3395,7 +3386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89084a074604e3247a228b6ead8966f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _log: 0
+  _log: 1
 --- !u!4 &1052435278
 Transform:
   m_ObjectHideFlags: 0
@@ -40192,7 +40183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _statusText: {fileID: 876987024}
   _statusContainer: {fileID: 562040529}
-  _screen: {fileID: 0}
+  _screen: {fileID: 335832950}
 --- !u!1 &1940324978
 GameObject:
   m_ObjectHideFlags: 0
@@ -40305,7 +40296,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 9598b066fc181c54685ee3ff96fb8f42, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 0.12
+  m_Pitch: 0.0000001064184
   Loop: 1
   Mute: 0
   Spatialize: 0
